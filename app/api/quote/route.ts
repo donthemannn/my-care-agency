@@ -1,130 +1,100 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
+import { planService, QuoteRequest } from '@/lib/services/planService';
+import { supabase } from '@/lib/supabaseClient';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { state, zipCode, ages, income, householdSize, coverageType } = body
+    const body: QuoteRequest = await request.json();
+    const { zipCode, state, annualIncome, householdSize, ages } = body;
 
-    // Input validation
-    if (!state || !zipCode || !ages || !income || !householdSize) {
+    // Validate input
+    if (!zipCode || !state || !annualIncome || !householdSize || !ages?.length) {
       return NextResponse.json(
-        { error: 'Missing required fields: state, zipCode, ages, income, householdSize' },
+        { error: 'Missing required fields' },
         { status: 400 }
-      )
+      );
     }
 
-    // Security validation - only allow Alabama
-    if (state !== 'AL') {
+    console.log('Processing quote request:', { zipCode, state, annualIncome, householdSize, ages });
+
+    // Get comprehensive quote with all plans
+    const quoteResponse = await planService.getQuote({
+      zipCode,
+      state,
+      annualIncome,
+      householdSize,
+      ages
+    });
+
+    if (!quoteResponse.plans || quoteResponse.plans.length === 0) {
       return NextResponse.json(
-        { error: 'Currently only Alabama (AL) is supported' },
-        { status: 400 }
-      )
+        { error: 'No plans found for this location' },
+        { status: 404 }
+      );
     }
 
-    // Validate zip code format (5 digits)
-    if (!/^\d{5}$/.test(zipCode)) {
-      return NextResponse.json(
-        { error: 'Invalid zip code format. Please enter a 5-digit zip code.' },
-        { status: 400 }
-      )
+    // Get the best plan (lowest net premium)
+    const bestPlan = quoteResponse.plans.reduce((prev, current) => 
+      (prev.netPremium < current.netPremium) ? prev : current
+    );
+
+    // Save quote to database
+    const { data: quoteData, error: quoteError } = await supabase
+      .from('quotes')
+      .insert([{
+        zip_code: zipCode,
+        state: state.toUpperCase(),
+        annual_income: annualIncome,
+        household_size: householdSize,
+        ages: ages,
+        premium: bestPlan.premium,
+        subsidy_amount: quoteResponse.subsidyAmount,
+        net_premium: bestPlan.netPremium,
+        plan_id: bestPlan.id,
+        plan_name: bestPlan.name,
+        issuer_name: bestPlan.issuer.name,
+        metal_level: bestPlan.metalLevel,
+        plan_type: bestPlan.planType,
+        deductible: bestPlan.deductible?.individual || null,
+        out_of_pocket_max: bestPlan.outOfPocketMax?.individual || null,
+        profile_id: null // Anonymous for now
+      }])
+      .select('id')
+      .single();
+
+    if (quoteError) {
+      console.error('Error saving quote:', quoteError);
+      // Continue even if save fails - don't block the user
     }
 
-    // Validate income range
-    if (income < 0 || income > 1000000) {
-      return NextResponse.json(
-        { error: 'Income must be between $0 and $1,000,000' },
-        { status: 400 }
-      )
-    }
-
-    // Validate household size
-    if (householdSize < 1 || householdSize > 20) {
-      return NextResponse.json(
-        { error: 'Household size must be between 1 and 20' },
-        { status: 400 }
-      )
-    }
-
-    // Validate ages array
-    if (!Array.isArray(ages) || ages.length === 0 || ages.some(age => age < 0 || age > 120)) {
-      return NextResponse.json(
-        { error: 'Invalid ages provided. Ages must be between 0 and 120.' },
-        { status: 400 }
-      )
-    }
-
-    console.log(`Getting mock data for ${zipCode}, ${state}...`)
-
-    // Mock Alabama insurance plans for testing
-    const mockPlans = [
-      {
-        id: 'AL-BCBS-SILVER-001',
-        name: 'Blue Cross Blue Shield Silver Plan',
-        carrier: 'Blue Cross and Blue Shield of Alabama',
-        metalTier: 'silver',
-        premium: 350,
-        deductible: 2500,
-        outOfPocketMax: 8000,
-        planType: 'HMO',
-        networkTier: 'Standard'
-      },
-      {
-        id: 'AL-BCBS-BRONZE-001',
-        name: 'Blue Cross Blue Shield Bronze Plan',
-        carrier: 'Blue Cross and Blue Shield of Alabama',
-        metalTier: 'bronze',
-        premium: 280,
-        deductible: 5000,
-        outOfPocketMax: 8500,
-        planType: 'PPO',
-        networkTier: 'Standard'
-      },
-      {
-        id: 'AL-BCBS-GOLD-001',
-        name: 'Blue Cross Blue Shield Gold Plan',
-        carrier: 'Blue Cross and Blue Shield of Alabama',
-        metalTier: 'gold',
-        premium: 450,
-        deductible: 1500,
-        outOfPocketMax: 7000,
-        planType: 'HMO',
-        networkTier: 'Premium'
+    // Return comprehensive quote results
+    return NextResponse.json({
+      success: true,
+      quoteId: quoteData?.id,
+      ...quoteResponse,
+      bestPlan: {
+        id: bestPlan.id,
+        name: bestPlan.name,
+        issuer: bestPlan.issuer.name,
+        metalLevel: bestPlan.metalLevel,
+        planType: bestPlan.planType,
+        premium: bestPlan.premium,
+        netPremium: bestPlan.netPremium,
+        deductible: bestPlan.deductible?.individual,
+        outOfPocketMax: bestPlan.outOfPocketMax?.individual,
+        hasExtraSavings: bestPlan.hasExtraSavings
       }
-    ]
+    });
 
-    // Calculate mock subsidy based on income
-    const subsidyAmount = income < 50000 ? Math.max(0, 400 - (income / 1000)) : 0
-
-    const quoteResult = {
-      plans: mockPlans,
-      subsidyAmount: Math.round(subsidyAmount),
-      eligibleForSubsidy: subsidyAmount > 0,
-      benchmarkPlan: 'Second Lowest Cost Silver Plan',
-      location: {
-        state,
-        zipCode
-      },
-      household: {
-        income,
-        size: householdSize,
-        ages
-      },
-      dataSource: 'Mock Data for Alabama Testing',
-      timestamp: new Date().toISOString()
-    }
-
-    console.log(`Successfully retrieved ${mockPlans.length} plans with $${Math.round(subsidyAmount)} subsidy`)
-    return NextResponse.json(quoteResult)
-    
   } catch (error) {
-    console.error('Live CMS Quote API Error:', error)
+    console.error('Quote API Error:', error);
     
     return NextResponse.json(
       { 
-        error: `Failed to get live insurance data: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        dataSource: 'CMS Healthcare.gov Marketplace API (Live Data)'
+        error: 'Failed to generate quote',
+        details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
-    )
+    );
   }
 }
