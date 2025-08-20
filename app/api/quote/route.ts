@@ -1,89 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { planService, QuoteRequest } from '@/lib/services/planService';
-import { supabase } from '@/lib/supabaseClient';
+import { quoteService } from '@/lib/services/quoteService';
+import { QuoteFormData } from '@/lib/types';
 
 export async function POST(request: NextRequest) {
   try {
-    const body: QuoteRequest = await request.json();
-    const { zipCode, state, annualIncome, householdSize, ages } = body;
+    const formData: QuoteFormData = await request.json();
 
-    // Validate input
-    if (!zipCode || !state || !annualIncome || !householdSize || !ages?.length) {
+    console.log('Processing quote request:', { 
+      zipCode: formData.zipCode, 
+      income: formData.annualIncome,
+      householdSize: formData.householdSize 
+    });
+
+    // Validate the form data
+    const validation = quoteService.validateQuoteForm(formData);
+    if (!validation.valid) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { 
+          success: false,
+          error: 'Invalid form data',
+          details: validation.errors
+        },
         { status: 400 }
       );
     }
 
-    console.log('Processing quote request:', { zipCode, state, annualIncome, householdSize, ages });
+    // Generate the quote
+    const quoteResult = await quoteService.generateQuote(formData);
 
-    // Get comprehensive quote with all plans
-    const quoteResponse = await planService.getQuote({
-      zipCode,
-      state,
-      annualIncome,
-      householdSize,
-      ages
-    });
-
-    if (!quoteResponse.plans || quoteResponse.plans.length === 0) {
+    if (!quoteResult.success) {
       return NextResponse.json(
-        { error: 'No plans found for this location' },
-        { status: 404 }
+        {
+          success: false,
+          error: quoteResult.error
+        },
+        { status: 400 }
       );
     }
 
-    // Get the best plan (lowest net premium)
-    const bestPlan = quoteResponse.plans.reduce((prev, current) => 
-      (prev.netPremium < current.netPremium) ? prev : current
-    );
-
-    // Save quote to database
-    const { data: quoteData, error: quoteError } = await supabase
-      .from('quotes')
-      .insert([{
-        zip_code: zipCode,
-        state: state.toUpperCase(),
-        annual_income: annualIncome,
-        household_size: householdSize,
-        ages: ages,
-        premium: bestPlan.premium,
-        subsidy_amount: quoteResponse.subsidyAmount,
-        net_premium: bestPlan.netPremium,
-        plan_id: bestPlan.id,
-        plan_name: bestPlan.name,
-        issuer_name: bestPlan.issuer.name,
-        metal_level: bestPlan.metalLevel,
-        plan_type: bestPlan.planType,
-        deductible: bestPlan.deductible?.individual || null,
-        out_of_pocket_max: bestPlan.outOfPocketMax?.individual || null,
-        profile_id: null // Anonymous for now
-      }])
-      .select('id')
-      .single();
-
-    if (quoteError) {
-      console.error('Error saving quote:', quoteError);
-      // Continue even if save fails - don't block the user
-    }
-
-    // Return comprehensive quote results
+    // Return successful quote
     return NextResponse.json({
       success: true,
-      quoteId: quoteData?.id,
-      ...quoteResponse,
-      bestPlan: {
-        id: bestPlan.id,
-        name: bestPlan.name,
-        issuer: bestPlan.issuer.name,
-        metalLevel: bestPlan.metalLevel,
-        planType: bestPlan.planType,
-        premium: bestPlan.premium,
-        netPremium: bestPlan.netPremium,
-        deductible: bestPlan.deductible?.individual,
-        outOfPocketMax: bestPlan.outOfPocketMax?.individual,
-        hasExtraSavings: bestPlan.hasExtraSavings
-      }
+      data: quoteResult.data,
+      message: quoteResult.message
     });
 
   } catch (error) {
@@ -91,6 +50,7 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json(
       { 
+        success: false,
         error: 'Failed to generate quote',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
