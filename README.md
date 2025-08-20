@@ -1,10 +1,24 @@
-# My Care Agency - Multi-State Enterprise Insurance Platform
+# My Care Agency - Insurance Management Platform
 
-A comprehensive multi-state health insurance quoting platform with modular state architecture. Currently featuring Alabama with Texas and Florida expansion planned. Built with real-time CMS Marketplace API integration and professional agent dashboard.
+A comprehensive insurance management system with multiple features including dashboard, training, customer management, and quoting tools. Built with modular architecture for easy feature expansion.
 
-## 🚀 Features
+## 🚀 Platform Features
 
-### ✅ **Complete ACA Quote Engine**
+### ✅ **Active Features**
+- **Dashboard** - Central management hub with activity overview
+- **Training** - Insurance training modules and progress tracking
+- **AI Assistant** - Intelligent support and guidance system
+- **Settings** - User profile and system configuration
+
+### 🚧 **Coming Soon Features**
+- **Customers** - Client management and relationship tracking
+- **Quotes** - Multi-state ACA insurance quoting system
+- **Plan Finder** - Insurance plan discovery and comparison tools
+- **Reports** - Analytics, performance metrics, and compliance reporting
+- **Compliance** - Regulatory compliance tracking and management
+
+### 📋 **Quotes Feature Details** (When Enabled)
+The Quotes feature will include:
 - **Multi-step quote form** with all required ACA questions
 - **Real-time validation** using Zod schema validation
 - **CMS Marketplace API integration** following official guidelines
@@ -12,20 +26,11 @@ A comprehensive multi-state health insurance quoting platform with modular state
 - **Federal subsidy calculations** with 2024 poverty guidelines
 - **Professional plan display** with metal levels, premiums, and benefits
 
-### ✅ **Professional Dashboard**
-- **Supabase authentication** with magic link login
-- **Protected routes** with middleware
-- **Clean sidebar navigation** matching healthcare.gov style
-- **Quote history** for logged-in users
-- **Settings management** with profile and preferences
-- **System status monitoring**
-
-### ✅ **Multi-State Architecture**
-- **Modular state system** - Each state is its own feature module
-- **Alabama (ACTIVE)** - All 67 counties with accurate FIPS mapping
-- **Texas (PLANNED)** - Week 2 expansion target
-- **Florida (PLANNED)** - Week 3 expansion target
-- **Scalable design** - Easy addition of new states
+#### State Coverage (Inside Quotes)
+- **Alabama (FIRST)** - All 67 counties with accurate FIPS mapping
+- **Texas (PLANNED)** - Future expansion target
+- **Florida (PLANNED)** - Future expansion target
+- **Additional States** - Up to 13+ states total
 
 ## 🛠 Tech Stack
 

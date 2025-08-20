@@ -3,13 +3,11 @@
 import { useEffect, useState } from 'react'
 import SystemStatus from '@/components/SystemStatus'
 import { supabase } from '@/lib/supabaseClient'
+import { FEATURES } from '@/config/features'
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  
-  const quotingEnabled = process.env.NEXT_PUBLIC_ENABLE_QUOTING === 'true'
-  const alabamaEnabled = process.env.NEXT_PUBLIC_QUOTING_AL === 'true'
 
   useEffect(() => {
     const getUser = async () => {
@@ -43,9 +41,7 @@ export default function DashboardPage() {
         <h1 className="text-2xl font-bold text-gray-900">My Care Agency Dashboard</h1>
         <p className="mt-2 text-gray-600">
           Welcome back, {user?.email || 'User'}! 
-          {quotingEnabled && alabamaEnabled && ' Alabama quoting is ready.'}
-          {quotingEnabled && !alabamaEnabled && ' Quoting system is in setup mode.'}
-          {!quotingEnabled && ' Authentication system is active.'}
+          {FEATURES.QUOTING_ALABAMA ? ' Alabama quoting is ready.' : ' Phase 1 active - Authentication & Dashboard ready.'}
         </p>
       </div>
 
@@ -84,7 +80,7 @@ export default function DashboardPage() {
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     Active States
                   </dt>
-                  <dd className="text-lg font-medium text-gray-900">1</dd>
+                  <dd className="text-lg font-medium text-gray-900">{FEATURES.QUOTING_ALABAMA ? '1' : '0'}</dd>
                 </dl>
               </div>
             </div>
@@ -120,18 +116,30 @@ export default function DashboardPage() {
               Quick Actions
             </h3>
             <div className="space-y-4">
-              <a
-                href="/features/quoting"
-                className="relative block w-full border-2 border-green-300 border-dashed rounded-lg p-6 text-center hover:border-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 bg-green-50"
-              >
-                <div className="text-green-600 text-2xl mb-2">🏛️</div>
-                <span className="block text-sm font-medium text-gray-900">
-                  Quoting Tools
-                </span>
-                <span className="block text-sm text-gray-500">
-                  Alabama ACA quotes ready!
-                </span>
-              </a>
+              {FEATURES.QUOTING_ALABAMA ? (
+                <a
+                  href="/quoting"
+                  className="relative block w-full border-2 border-green-300 border-dashed rounded-lg p-6 text-center hover:border-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 bg-green-50"
+                >
+                  <div className="text-green-600 text-2xl mb-2">🏛️</div>
+                  <span className="block text-sm font-medium text-gray-900">
+                    Quoting Tools
+                  </span>
+                  <span className="block text-sm text-gray-500">
+                    Alabama ACA quotes ready!
+                  </span>
+                </a>
+              ) : (
+                <div className="relative block w-full border-2 border-gray-200 rounded-lg p-6 text-center opacity-50">
+                  <div className="text-gray-400 text-2xl mb-2">🏛️</div>
+                  <span className="block text-sm font-medium text-gray-400">
+                    Quoting Tools
+                  </span>
+                  <span className="block text-sm text-gray-400">
+                    Phase 2 - Coming Soon
+                  </span>
+                </div>
+              )}
 
               <div className="relative block w-full border-2 border-gray-200 rounded-lg p-6 text-center opacity-50">
                 <div className="text-gray-400 text-2xl mb-2">🤖</div>

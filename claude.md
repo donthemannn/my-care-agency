@@ -2,22 +2,24 @@
 
 ## 🎯 Project Overview
 
-This is a comprehensive **multi-state enterprise insurance platform** with modular architecture. Built from scratch following official CMS Marketplace API guidelines. Currently features Alabama (ACTIVE) with Texas and Florida expansion planned for Weeks 2-3.
+This is a comprehensive **insurance management platform** with modular feature architecture. The platform includes dashboard, training, customer management, and quoting capabilities. Built with enterprise-grade security and scalability in mind.
 
-## 🏗 Enterprise Architecture
+## 🏗 Platform Architecture
 
-### Multi-State Modular Design
+### Feature-Based Modular Design
 ```
-/app/(dashboard)/features/quoting/
-├── page.tsx                    # Main quoting hub
-├── layout.tsx                  # Shared quoting layout
-├── alabama/                    # ✅ ACTIVE - Week 1
-│   ├── page.tsx               # Alabama quote form
-│   └── components/            # Alabama-specific components
-├── texas/                     # 🚧 PLANNED - Week 2
-│   └── page.tsx               # "Coming Soon"
-└── florida/                   # 🚧 PLANNED - Week 3
-    └── page.tsx               # "Coming Soon"
+/app/(dashboard)/
+├── dashboard/                  # ✅ Main hub - activity overview
+├── training/                   # ✅ Training modules (coming soon)
+├── settings/                   # ✅ User settings
+├── customers/                  # 🚧 Customer management (coming soon)
+├── quotes/                     # 🚧 Multi-state quoting (coming soon)
+│   ├── page.tsx               # Quote hub
+│   ├── alabama/               # Alabama-specific quoting
+│   ├── texas/                 # Texas expansion (planned)
+│   └── florida/               # Florida expansion (planned)
+├── reports/                    # 🚧 Analytics (coming soon)
+└── compliance/                 # 🚧 Compliance tracking (coming soon)
 ```
 
 ## 🏗 Architecture Overview

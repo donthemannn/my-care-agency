@@ -29,23 +29,16 @@ export const ACTIVE_NAVIGATION: NavigationItem[] = [
     description: 'Overview and analytics'
   },
   {
-    name: 'Enrollment',
-    href: '/enrollment',
-    icon: ClipboardList,
-    description: '7-step MyCareAct enrollment',
-    highlight: true
-  },
-  {
     name: 'Training',
     href: '/training',
     icon: BookOpen,
-    description: 'HealthSherpa training center'
+    description: 'Insurance training modules'
   },
   {
     name: 'AI Assistant',
     href: '/chat',
     icon: MessageCircle,
-    description: 'Chat with AI agent'
+    description: 'Get help from AI assistant'
   },
   {
     name: 'Settings',
