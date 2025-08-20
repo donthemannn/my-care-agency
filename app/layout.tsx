@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Sean Insurance Agency Pro',
-  description: 'Professional insurance agency management system',
+  title: 'My Care Agency',
+  description: 'Professional care agency management system with ACA insurance quotes',
 }
 
 export default function RootLayout({

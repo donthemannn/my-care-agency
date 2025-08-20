@@ -113,7 +113,7 @@ export default function QuotesPage() {
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Your Quote Results</h1>
           <p className="mt-2 text-gray-600">
-            Found {quoteResults.totalPlans} plans in {quoteResults.county} County, Alabama
+            Found {quoteResults.totalPlans} ACA plans in {quoteResults.county} County
           </p>
         </div>
 
@@ -195,7 +195,7 @@ export default function QuotesPage() {
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Get Your Quote</h1>
-        <p className="mt-2 text-gray-600">Find the perfect Alabama health insurance plan for you</p>
+        <p className="mt-2 text-gray-600">Find the perfect ACA health insurance plan for you</p>
       </div>
 
       {/* Progress Bar */}

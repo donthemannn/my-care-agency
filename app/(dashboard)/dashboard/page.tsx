@@ -4,8 +4,8 @@ export default function DashboardPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-2 text-gray-600">Welcome to your insurance agency dashboard</p>
+        <h1 className="text-2xl font-bold text-gray-900">My Care Agency Dashboard</h1>
+        <p className="mt-2 text-gray-600">Welcome to your care agency management system</p>
       </div>
 
       {/* Stats Cards */}
@@ -61,7 +61,7 @@ export default function DashboardPage() {
               <div className="ml-5 w-0 flex-1">
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">
-                    Alabama Ready
+                    ACA Quotes Ready
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">✓</dd>
                 </dl>
@@ -88,7 +88,7 @@ export default function DashboardPage() {
                   Create New Quote
                 </span>
                 <span className="block text-sm text-gray-500">
-                  Get Alabama insurance quotes
+                  Get ACA insurance quotes
                 </span>
               </a>
 
