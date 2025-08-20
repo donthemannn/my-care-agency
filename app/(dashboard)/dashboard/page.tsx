@@ -1,11 +1,52 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import SystemStatus from '@/components/SystemStatus'
+import { supabase } from '@/lib/supabaseClient'
 
 export default function DashboardPage() {
+  const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  
+  const quotingEnabled = process.env.NEXT_PUBLIC_ENABLE_QUOTING === 'true'
+  const alabamaEnabled = process.env.NEXT_PUBLIC_QUOTING_AL === 'true'
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+      setLoading(false)
+    }
+    
+    getUser()
+    
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null)
+        setLoading(false)
+      }
+    )
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-500"></div>
+      </div>
+    )
+  }
   return (
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">My Care Agency Dashboard</h1>
-        <p className="mt-2 text-gray-600">Welcome to your care agency management system</p>
+        <p className="mt-2 text-gray-600">
+          Welcome back, {user?.email || 'User'}! 
+          {quotingEnabled && alabamaEnabled && ' Alabama quoting is ready.'}
+          {quotingEnabled && !alabamaEnabled && ' Quoting system is in setup mode.'}
+          {!quotingEnabled && ' Authentication system is active.'}
+        </p>
       </div>
 
       {/* Stats Cards */}
