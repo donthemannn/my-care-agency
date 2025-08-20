@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import weaviate from 'weaviate-ts-client';
 
 // Supabase client
 export const supabase = createClient(
@@ -7,14 +6,8 @@ export const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-// Weaviate client
-export const weaviateClient = process.env.WEAVIATE_URL ? weaviate.client({
-  scheme: 'https',
-  host: process.env.WEAVIATE_URL.replace('https://', ''),
-  apiKey: {
-    apiKey: process.env.WEAVIATE_API_KEY!,
-  },
-}) : null;
+// Weaviate client (disabled for initial deployment)
+export const weaviateClient = null;
 
 // Database interfaces
 export interface InsurancePlan {

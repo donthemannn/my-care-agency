@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { EnhancedPlan, QuoteResponse } from '@/lib/services/planService';
 import { formatCurrency } from '@/lib/utils/subsidy';
@@ -9,7 +9,7 @@ import MetalTierSidebar from '@/components/plans/MetalTierSidebar';
 import FilterBar from '@/components/plans/FilterBar';
 import Pagination from '@/components/plans/Pagination';
 
-export default function PlansPage() {
+function PlansPageContent() {
   const searchParams = useSearchParams();
   const [quoteData, setQuoteData] = useState<QuoteResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -267,5 +267,24 @@ export default function PlansPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <div className="text-lg font-medium text-gray-900">Loading plans...</div>
+      </div>
+    </div>
+  );
+}
+
+export default function PlansPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <PlansPageContent />
+    </Suspense>
   );
 }
