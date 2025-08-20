@@ -80,15 +80,15 @@ export default function DashboardPage() {
             </h3>
             <div className="space-y-4">
               <a
-                href="/quotes"
-                className="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-6 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                href="/features/quoting"
+                className="relative block w-full border-2 border-green-300 border-dashed rounded-lg p-6 text-center hover:border-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 bg-green-50"
               >
-                <div className="text-indigo-600 text-2xl mb-2">📋</div>
+                <div className="text-green-600 text-2xl mb-2">🏛️</div>
                 <span className="block text-sm font-medium text-gray-900">
-                  Create New Quote
+                  Quoting Tools
                 </span>
                 <span className="block text-sm text-gray-500">
-                  Get ACA insurance quotes
+                  Alabama ACA quotes ready!
                 </span>
               </a>
 

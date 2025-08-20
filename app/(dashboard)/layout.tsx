@@ -9,7 +9,7 @@ import type { User } from '@supabase/supabase-js'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', current: false },
-  { name: 'Quotes', href: '/quotes', current: false },
+  { name: 'Quoting Tools', href: '/features/quoting', current: false },
   { name: 'Settings', href: '/settings', current: false },
 ]
 
