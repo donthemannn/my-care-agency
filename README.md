@@ -1,6 +1,6 @@
-# My Care Agency - Alabama Insurance Quote System
+# My Care Agency - Multi-State Enterprise Insurance Platform
 
-A comprehensive health insurance quote application built specifically for Alabama, featuring real-time CMS Marketplace API integration and professional agent dashboard.
+A comprehensive multi-state health insurance quoting platform with modular state architecture. Currently featuring Alabama with Texas and Florida expansion planned. Built with real-time CMS Marketplace API integration and professional agent dashboard.
 
 ## 🚀 Features
 
@@ -20,11 +20,12 @@ A comprehensive health insurance quote application built specifically for Alabam
 - **Settings management** with profile and preferences
 - **System status monitoring**
 
-### ✅ **Alabama-Specific Features**
-- **All 67 Alabama counties** supported with accurate FIPS mapping
-- **Real CMS plan data** from healthcare.gov marketplace
-- **Subsidy calculations** based on Alabama-specific requirements
-- **Professional agent interface** designed for licensed insurance agents
+### ✅ **Multi-State Architecture**
+- **Modular state system** - Each state is its own feature module
+- **Alabama (ACTIVE)** - All 67 counties with accurate FIPS mapping
+- **Texas (PLANNED)** - Week 2 expansion target
+- **Florida (PLANNED)** - Week 3 expansion target
+- **Scalable design** - Easy addition of new states
 
 ## 🛠 Tech Stack
 
@@ -217,12 +218,20 @@ Consider adding:
 ## 📈 Scaling
 
 ### Multi-State Expansion
-To add additional states:
+**Current Architecture**: `/app/(dashboard)/features/quoting/[state]/`
 
-1. **Update Geographic Service**: Add state-specific county mappings
-2. **Modify CMS Integration**: Update state filters in API calls
-3. **Database Updates**: Add state-specific quote tables if needed
-4. **UI Updates**: Update state selection in forms
+**Active States**:
+- ✅ **Alabama** - `/features/quoting/alabama/` (LIVE)
+
+**Planned States**:
+- 🚧 **Texas** - `/features/quoting/texas/` (Week 2)
+- 🚧 **Florida** - `/features/quoting/florida/` (Week 3)
+
+**To Add New States**:
+1. Create `/features/quoting/[state]/` directory
+2. Add state-specific county mappings
+3. Update CMS API integration for state
+4. Add state to dashboard navigation
 
 ### Performance Optimization
 - **Caching**: Redis for API response caching

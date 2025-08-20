@@ -2,7 +2,23 @@
 
 ## 🎯 Project Overview
 
-This is a comprehensive Alabama health insurance quote application built from scratch following official CMS Marketplace API guidelines. The system provides real-time insurance quotes with accurate subsidy calculations for all 67 Alabama counties.
+This is a comprehensive **multi-state enterprise insurance platform** with modular architecture. Built from scratch following official CMS Marketplace API guidelines. Currently features Alabama (ACTIVE) with Texas and Florida expansion planned for Weeks 2-3.
+
+## 🏗 Enterprise Architecture
+
+### Multi-State Modular Design
+```
+/app/(dashboard)/features/quoting/
+├── page.tsx                    # Main quoting hub
+├── layout.tsx                  # Shared quoting layout
+├── alabama/                    # ✅ ACTIVE - Week 1
+│   ├── page.tsx               # Alabama quote form
+│   └── components/            # Alabama-specific components
+├── texas/                     # 🚧 PLANNED - Week 2
+│   └── page.tsx               # "Coming Soon"
+└── florida/                   # 🚧 PLANNED - Week 3
+    └── page.tsx               # "Coming Soon"
+```
 
 ## 🏗 Architecture Overview
 
