@@ -16,6 +16,10 @@ export default function LoginPage() {
     setMessage('')
 
     try {
+      // Debug: Check if Supabase client is properly initialized
+      console.log('Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+      console.log('Supabase client:', supabase)
+      
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
@@ -24,12 +28,14 @@ export default function LoginPage() {
       })
 
       if (error) {
-        setMessage(error.message)
+        console.error('Supabase auth error:', error)
+        setMessage(`Auth error: ${error.message}`)
       } else {
         setMessage('Check your email for the magic link!')
       }
     } catch (error) {
-      setMessage('Login failed. Please try again.')
+      console.error('Login exception:', error)
+      setMessage(`Login failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setIsLoading(false)
     }
