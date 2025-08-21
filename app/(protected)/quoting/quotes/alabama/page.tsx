@@ -99,18 +99,18 @@ export default function AlabamaQuotingPage() {
                      inputs.gender && inputs.zipCode
 
   return (
-    <div className="space-y-8">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-blue-900 mb-2">Alabama ACA Marketplace Quotes</h2>
-        <p className="text-blue-700">
+    <div className="space-y-8 p-8">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl p-8 shadow-xl">
+        <h2 className="text-3xl font-bold mb-3">Alabama ACA Marketplace Quotes</h2>
+        <p className="text-blue-50 text-lg">
           Get accurate subsidy estimates and out-of-pocket costs for Alabama residents.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card>
+        <Card className="shadow-xl hover:shadow-2xl transition-shadow duration-300 border-0">
           <CardHeader>
-            <CardTitle>Quote Information</CardTitle>
+            <CardTitle className="text-xl font-bold">Quote Information</CardTitle>
             <CardDescription>
               Enter the applicant's information to calculate subsidies and costs
             </CardDescription>

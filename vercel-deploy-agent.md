@@ -78,38 +78,31 @@ mcp__vercel__rollback [deployment-id]
 - **Python/Go/Ruby** - Backend APIs
 - **Remix** - Full-stack web framework
 
-## My Care Act Deployments
-For My Care Act container deployments:
-1. **Healthcare App** - Insurance enrollment platform
-2. **Agent Dashboard** - GoHighLevel integration
-3. **Knowledge Base** - Documentation site
+## My Care Agency Deployments
+For My Care Agency platform deployments:
+1. **Main Application** - Insurance management platform
+2. **Agent Dashboard** - Professional quoting tools
+3. **Alabama Quoting** - ACA marketplace integration
 4. **API Services** - Backend microservices
-
-## Big Disco Deployments
-For Big Disco production tools:
-1. **Production Copilot** - AI-assisted production workflows
-2. **Knowledge Management** - Team documentation
-3. **Client Portals** - Project management interfaces
-4. **Creative Tools** - Production utilities
 
 ## Environment Management
 
 ### Development
-```
+```env
 NEXT_PUBLIC_API_URL=http://localhost:3000
 DATABASE_URL=postgresql://local
 DEBUG=true
 ```
 
 ### Staging
-```
+```env
 NEXT_PUBLIC_API_URL=https://staging.example.com
 DATABASE_URL=postgresql://staging
 DEBUG=true
 ```
 
 ### Production
-```
+```env
 NEXT_PUBLIC_API_URL=https://api.example.com
 DATABASE_URL=postgresql://production
 DEBUG=false

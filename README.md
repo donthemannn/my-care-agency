@@ -279,4 +279,4 @@ This project is proprietary software for My Care Agency. All rights reserved.
 
 **Built with ❤️ for Alabama insurance agents**
 
-*Last updated: August 2024*
+*Last updated: August 2025*

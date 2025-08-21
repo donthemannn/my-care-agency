@@ -45,7 +45,7 @@ export function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center px-6 py-3 text-sm font-medium transition-all duration-200 ${
+              className={`flex items-center px-6 py-3 text-sm font-medium transition-colors duration-200 ${
                 isActive
                   ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
                   : 'text-gray-300 hover:bg-gray-700 hover:text-white'
@@ -65,7 +65,7 @@ export function Sidebar() {
       <div className="absolute bottom-0 w-64 p-6 border-t border-gray-700">
         <button
           onClick={handleSignOut}
-          className="w-full px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all duration-200 shadow-md hover:shadow-lg"
+          className="w-full px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors duration-200 shadow-md hover:shadow-lg"
         >
           Sign Out
         </button>
