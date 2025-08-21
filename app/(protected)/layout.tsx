@@ -1,5 +1,4 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
+import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import { Sidebar } from '@/components/Sidebar'
 
@@ -8,13 +7,9 @@ export default async function ProtectedLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createServerComponentClient({ cookies })
-  
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  const { userId } = auth()
 
-  if (!session) {
+  if (!userId) {
     redirect('/login')
   }
 
