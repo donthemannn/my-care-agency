@@ -31,11 +31,11 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">
-          Welcome back, {user?.firstName || 'User'}!
+        <h1 className="text-3xl font-bold tracking-tight text-blue-600">
+          🎉 MODERN DASHBOARD DEPLOYED! Welcome back, {user?.firstName || 'User'}!
         </h1>
-        <p className="text-muted-foreground">
-          Your insurance quoting platform is ready. Start generating Alabama ACA quotes today.
+        <p className="text-muted-foreground text-lg">
+          ✅ Your NEW insurance quoting platform is ready. Start generating Alabama ACA quotes today.
         </p>
       </div>
 
