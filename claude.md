@@ -11,7 +11,7 @@ This is a comprehensive **insurance management platform** with modular feature a
 ### Feature-Based Modular Design
 ```
 /app/(protected)/
-├── dashboard/                  # ✅ Modern card-based dashboard with shadcn/ui
+├── dashboard/                  # ✅ Modern card-based dashboard with shadcn/ui 
 ├── settings/                   # ✅ Clerk-integrated user settings
 ├── quoting/
 │   ├── quotes/

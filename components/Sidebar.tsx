@@ -17,10 +17,10 @@ export function Sidebar() {
   }
 
   return (
-    <div className="w-64 bg-white shadow-lg">
-      <div className="p-6">
-        <h1 className="text-xl font-bold text-gray-900">My Care Agency</h1>
-        <p className="text-sm text-gray-600">Insurance Management Platform</p>
+    <div className="w-64 bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl">
+      <div className="p-6 border-b border-gray-700">
+        <h1 className="text-xl font-bold text-white">My Care Agency</h1>
+        <p className="text-sm text-gray-400">Insurance Management Platform</p>
       </div>
       
       <nav className="mt-6">
@@ -31,10 +31,10 @@ export function Sidebar() {
             return (
               <div
                 key={item.name}
-                className="flex items-center px-6 py-3 text-gray-400 cursor-not-allowed"
+                className="flex items-center px-6 py-3 text-gray-500 cursor-not-allowed"
               >
                 <span>{item.name}</span>
-                <span className="ml-auto text-xs bg-gray-100 px-2 py-1 rounded">
+                <span className="ml-auto text-xs bg-gray-700 text-gray-400 px-2 py-1 rounded">
                   Coming Soon
                 </span>
               </div>
@@ -45,15 +45,15 @@ export function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center px-6 py-3 text-sm font-medium transition-colors ${
+              className={`flex items-center px-6 py-3 text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700'
-                  : 'text-gray-700 hover:bg-gray-50'
+                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
               }`}
             >
               {item.name}
               {item.phase && (
-                <span className="ml-auto text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                <span className="ml-auto text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded">
                   Phase {item.phase}
                 </span>
               )}
@@ -62,10 +62,10 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="absolute bottom-0 w-64 p-6 border-t">
+      <div className="absolute bottom-0 w-64 p-6 border-t border-gray-700">
         <button
           onClick={handleSignOut}
-          className="w-full px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
+          className="w-full px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700 transition-all duration-200 shadow-md hover:shadow-lg"
         >
           Sign Out
         </button>

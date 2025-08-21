@@ -14,7 +14,7 @@ export default async function ProtectedLayout({
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gradient-to-br from-gray-50 to-white">
       <Sidebar />
       <main className="flex-1 overflow-y-auto">
         {children}
