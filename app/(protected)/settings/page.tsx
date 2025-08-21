@@ -1,17 +1,15 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabaseClient'
-import type { User } from '@supabase/supabase-js'
+import { useState } from 'react'
+import { useUser } from '@clerk/nextjs'
 
 export default function SettingsPage() {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const { user, isLoaded } = useUser()
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [profile, setProfile] = useState({
-    firstName: '',
-    lastName: '',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
     phone: '',
     licenseNumber: '',
     state: 'Alabama',
@@ -21,16 +19,6 @@ export default function SettingsPage() {
       marketing: false
     }
   })
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      setLoading(false)
-    }
-
-    getUser()
-  }, [])
 
   const handleSave = async () => {
     setSaving(true)
@@ -48,7 +36,7 @@ export default function SettingsPage() {
     }
   }
 
-  if (loading) {
+  if (!isLoaded) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-lg">Loading...</div>
@@ -107,7 +95,7 @@ export default function SettingsPage() {
                 <input
                   type="email"
                   id="email"
-                  value={user?.email || ''}
+                  value={user?.emailAddresses?.[0]?.emailAddress || ''}
                   disabled
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-500 sm:text-sm"
                 />

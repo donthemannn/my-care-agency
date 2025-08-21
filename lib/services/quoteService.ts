@@ -6,7 +6,7 @@
 import { QuoteFormData, QuoteResult, PlanResult, ApiResponse } from '../types';
 import { geoService } from './geoService';
 import { cmsApiService } from './cmsApiService';
-import { supabase } from '../supabaseClient';
+// import { supabase } from '../supabaseClient';
 
 export class QuoteService {
   
@@ -87,44 +87,9 @@ export class QuoteService {
     county: string, 
     fips: string
   ): Promise<void> {
-    try {
-      // Get current user (if logged in)
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      // Save each plan as a separate quote record
-      const quoteRecords = plans.map(plan => ({
-        profile_id: user?.id || null,
-        zip_code: formData.zipCode,
-        state: 'Alabama',
-        annual_income: formData.annualIncome,
-        household_size: formData.householdSize,
-        ages: [this.calculateAge(formData.dateOfBirth)],
-        premium: plan.monthlyPremium,
-        subsidy_amount: plan.aptcAmount || 0,
-        net_premium: plan.monthlyPremiumAfterSubsidy,
-        plan_id: plan.id,
-        plan_name: plan.name,
-        issuer_name: plan.issuer,
-        metal_level: plan.metalLevel,
-        plan_type: plan.planType,
-        deductible: plan.annualDeductible,
-        out_of_pocket_max: plan.maxOutOfPocket,
-        county_fips: fips,
-      }));
-
-      const { error } = await supabase
-        .from('quotes')
-        .insert(quoteRecords);
-
-      if (error) {
-        throw error;
-      }
-
-      console.log(`${quoteRecords.length} quotes saved to database successfully`);
-    } catch (error) {
-      console.error('Database save failed:', error);
-      throw error;
-    }
+    // TODO: Implement database saving with Clerk user ID
+    // For now, skip database saving during Phase 1
+    console.log('Quote generated but not saved to database (Phase 1)');
   }
 
   // ============================================
@@ -132,42 +97,15 @@ export class QuoteService {
   // ============================================
 
   async getUserQuotes(userId: string, limit: number = 10): Promise<any[]> {
-    try {
-      const { data, error } = await supabase
-        .from('quotes')
-        .select('*')
-        .eq('profile_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(limit);
-
-      if (error) {
-        throw error;
-      }
-
-      return data || [];
-    } catch (error) {
-      console.error('Failed to fetch user quotes:', error);
-      return [];
-    }
+    // TODO: Implement with Clerk user ID
+    console.log('getUserQuotes not implemented in Phase 1');
+    return [];
   }
 
   async getQuoteById(quoteId: string): Promise<QuoteResult | null> {
-    try {
-      const { data, error } = await supabase
-        .from('quotes')
-        .select('*')
-        .eq('id', quoteId)
-        .single();
-
-      if (error) {
-        throw error;
-      }
-
-      return data;
-    } catch (error) {
-      console.error('Failed to fetch quote:', error);
-      return null;
-    }
+    // TODO: Implement with database
+    console.log('getQuoteById not implemented in Phase 1');
+    return null;
   }
 
   // ============================================

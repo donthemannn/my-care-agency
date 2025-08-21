@@ -1,34 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import SystemStatus from '@/components/SystemStatus'
-import { supabase } from '@/lib/supabaseClient'
+import { useUser } from '@clerk/nextjs'
 import { FEATURES } from '@/config/features'
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const { user, isLoaded } = useUser()
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      setLoading(false)
-    }
-    
-    getUser()
-    
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user ?? null)
-        setLoading(false)
-      }
-    )
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  if (loading) {
+  if (!isLoaded) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-500"></div>
@@ -40,7 +19,7 @@ export default function DashboardPage() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">My Care Agency Dashboard</h1>
         <p className="mt-2 text-gray-600">
-          Welcome back, {user?.email || 'User'}! 
+          Welcome back, {user?.emailAddresses?.[0]?.emailAddress || user?.firstName || 'User'}! 
           {FEATURES.QUOTING_ALABAMA ? ' Alabama quoting is ready.' : ' Phase 1 active - Authentication & Dashboard ready.'}
         </p>
       </div>
