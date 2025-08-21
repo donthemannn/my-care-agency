@@ -11,8 +11,6 @@ export default function SettingsPage() {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     phone: '',
-    licenseNumber: '',
-    state: 'Alabama',
     notifications: {
       email: true,
       sms: false,
@@ -100,7 +98,7 @@ export default function SettingsPage() {
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-500 sm:text-sm"
                 />
                 <p className="mt-1 text-xs text-gray-500">
-                  Email cannot be changed. Contact support if needed.
+                  Email is managed by Clerk. Use your account settings to change it.
                 </p>
               </div>
 
@@ -118,34 +116,7 @@ export default function SettingsPage() {
                 />
               </div>
 
-              <div>
-                <label htmlFor="licenseNumber" className="block text-sm font-medium text-gray-700">
-                  License Number
-                </label>
-                <input
-                  type="text"
-                  id="licenseNumber"
-                  value={profile.licenseNumber}
-                  onChange={(e) => setProfile(prev => ({ ...prev, licenseNumber: e.target.value }))}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  placeholder="AL123456"
-                />
-              </div>
 
-              <div>
-                <label htmlFor="state" className="block text-sm font-medium text-gray-700">
-                  Licensed State
-                </label>
-                <select
-                  id="state"
-                  value={profile.state}
-                  onChange={(e) => setProfile(prev => ({ ...prev, state: e.target.value }))}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="Alabama">Alabama</option>
-                  <option value="Other" disabled>Other states (Coming Soon)</option>
-                </select>
-              </div>
             </div>
           </div>
         </div>
