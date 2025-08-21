@@ -10,7 +10,7 @@ export default async function ProtectedLayout({
   const user = await currentUser()
 
   if (!user) {
-    redirect('/login')
+    redirect('/sign-in')
   }
 
   return (

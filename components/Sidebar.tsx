@@ -3,17 +3,17 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { NAVIGATION_ITEMS } from '@/config/features'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useClerk } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 
 export function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
-  const supabase = createClientComponentClient()
+  const { signOut } = useClerk()
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/login')
+    await signOut()
+    router.push('/sign-in')
   }
 
   return (
