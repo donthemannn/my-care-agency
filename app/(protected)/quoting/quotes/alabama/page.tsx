@@ -100,11 +100,16 @@ export default function AlabamaQuotingPage() {
 
   return (
     <div className="space-y-8 p-8">
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl p-8 shadow-xl">
-        <h2 className="text-3xl font-bold mb-3">Alabama ACA Marketplace Quotes</h2>
+      <div role="region" aria-labelledby="al-hero-title" className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl p-8 shadow-xl">
+        <h2 id="al-hero-title" className="text-3xl font-bold mb-3">Alabama ACA Marketplace Quotes</h2>
         <p className="text-blue-50 text-lg">
           Get accurate subsidy estimates and out-of-pocket costs for Alabama residents.
         </p>
+        <div className="mt-4 flex items-center gap-2 text-blue-100">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-white/20 backdrop-blur-sm">
+            🚧 API Integration Pending
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -218,25 +223,37 @@ export default function AlabamaQuotingPage() {
             <Button 
               onClick={calculateQuote} 
               disabled={!isFormValid || loading}
-              className="w-full"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-shadow duration-300 text-white font-semibold py-3"
             >
-              {loading ? 'Calculating...' : 'Calculate Quote'}
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                  Calculating...
+                </span>
+              ) : (
+                'Calculate Quote'
+              )}
             </Button>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-xl hover:shadow-2xl transition-shadow duration-300 border-0">
           <CardHeader>
-            <CardTitle>Quote Results</CardTitle>
+            <CardTitle className="text-xl font-bold">Quote Results</CardTitle>
             <CardDescription>
               Estimated costs and subsidies for Alabama ACA plans
             </CardDescription>
           </CardHeader>
           <CardContent>
             {!results ? (
-              <div className="text-center py-12 text-gray-500">
-                <div className="text-4xl mb-4">📊</div>
-                <p>Enter information and click "Calculate Quote" to see results</p>
+              <div className="text-center py-16">
+                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full flex items-center justify-center">
+                  <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <p className="text-gray-600 text-lg">Enter information and click "Calculate Quote" to see results</p>
+                <p className="text-gray-400 text-sm mt-2">Your personalized quote will appear here</p>
               </div>
             ) : (
               <div className="space-y-6">
@@ -247,7 +264,7 @@ export default function AlabamaQuotingPage() {
                 </div>
 
                 {results.plans.slice(0, 3).map((plan, index) => (
-                  <Card key={plan.id} className={index === 0 ? 'border-blue-500 border-2' : ''}>
+                  <Card key={plan.id} className={`transition-all duration-300 hover:shadow-lg ${index === 0 ? 'border-blue-500 border-2 shadow-lg' : 'border-gray-200'}`}>
                     <CardHeader className="pb-3">
                       <div className="flex justify-between items-start">
                         <div>
@@ -255,8 +272,8 @@ export default function AlabamaQuotingPage() {
                           <CardDescription>{plan.issuer} • {plan.metalLevel} • {plan.planType}</CardDescription>
                         </div>
                         {index === 0 && (
-                          <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
-                            BEST VALUE
+                          <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                            ✨ BEST VALUE
                           </div>
                         )}
                       </div>

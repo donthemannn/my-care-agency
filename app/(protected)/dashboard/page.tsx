@@ -136,7 +136,7 @@ export default function DashboardPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green-500" aria-hidden="true" />
                 <span className="text-sm">CMS Marketplace API</span>
               </div>
               <span className="text-xs text-green-600 font-medium">Connected</span>
@@ -144,7 +144,7 @@ export default function DashboardPage() {
             
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green-500" aria-hidden="true" />
                 <span className="text-sm">SmartyStreets API</span>
               </div>
               <span className="text-xs text-green-600 font-medium">Connected</span>
@@ -152,7 +152,7 @@ export default function DashboardPage() {
             
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green-500" aria-hidden="true" />
                 <span className="text-sm">Database</span>
               </div>
               <span className="text-xs text-green-600 font-medium">Connected</span>
@@ -160,7 +160,7 @@ export default function DashboardPage() {
             
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green-500" aria-hidden="true" />
                 <span className="text-sm">Alabama Plan Data</span>
               </div>
               <span className="text-xs text-green-600 font-medium">Available</span>
