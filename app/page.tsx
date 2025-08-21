@@ -16,7 +16,7 @@ export default function RootPage() {
           
           <div className="space-y-4">
             <SignedOut>
-              <SignInButton mode="redirect" redirectUrl="/dashboard">
+              <SignInButton mode="redirect" forceRedirectUrl="/dashboard">
                 <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg text-lg transition-colors">
                   Sign In to Dashboard
                 </button>

@@ -6,7 +6,8 @@
 import { QuoteFormData, QuoteResult, PlanResult, ApiResponse } from '../types';
 import { geoService } from './geoService';
 import { cmsApiService } from './cmsApiService';
-// import { supabase } from '../supabaseClient';
+import { createClerkSupabaseClient } from '../db/supabase';
+import { auth } from '@clerk/nextjs/server';
 
 export class QuoteService {
   
@@ -87,25 +88,124 @@ export class QuoteService {
     county: string, 
     fips: string
   ): Promise<void> {
-    // TODO: Implement database saving with Clerk user ID
-    // For now, skip database saving during Phase 1
-    console.log('Quote generated but not saved to database (Phase 1)');
+    try {
+      const { userId } = await auth();
+      
+      // Skip database saving if user is not authenticated
+      if (!userId) {
+        console.log('Anonymous quote - not saved to database');
+        return;
+      }
+
+      const supabase = await createClerkSupabaseClient();
+      
+      // Get the best plan (first one, as they're sorted by premium)
+      const bestPlan = plans[0];
+      if (!bestPlan) {
+        console.warn('No plans to save to database');
+        return;
+      }
+
+      // Insert quote record
+      const { error } = await supabase.from('quotes').insert({
+        profile_id: userId,
+        zip_code: formData.zipCode,
+        state: 'AL', // Alabama for now
+        annual_income: formData.annualIncome,
+        household_size: formData.householdSize,
+        date_of_birth: formData.dateOfBirth,
+        gender: formData.gender,
+        premium: bestPlan.monthlyPremium,
+        subsidy_amount: bestPlan.aptcAmount || 0,
+        net_premium: bestPlan.monthlyPremiumAfterSubsidy,
+        plan_id: bestPlan.id,
+        plan_name: bestPlan.name,
+        issuer_name: bestPlan.issuer,
+        metal_level: bestPlan.metalLevel,
+        plan_type: bestPlan.planType,
+        deductible: bestPlan.annualDeductible,
+        out_of_pocket_max: bestPlan.maxOutOfPocket,
+        county_name: county,
+        county_fips: fips,
+        total_plans_found: plans.length,
+        quote_data: { plans: plans.slice(0, 10) } // Store top 10 plans
+      });
+
+      if (error) {
+        console.error('Database save error:', error);
+        throw error;
+      }
+
+      console.log(`Quote saved to database for user ${userId}`);
+    } catch (error) {
+      console.error('Failed to save quote to database:', error);
+      // Don't throw - we don't want to fail the entire quote if DB save fails
+    }
   }
 
   // ============================================
   // QUOTE HISTORY (FOR LOGGED IN USERS)
   // ============================================
 
-  async getUserQuotes(userId: string, limit: number = 10): Promise<any[]> {
-    // TODO: Implement with Clerk user ID
-    console.log('getUserQuotes not implemented in Phase 1');
-    return [];
+  async getUserQuotes(limit: number = 10): Promise<any[]> {
+    try {
+      const { userId } = await auth();
+      
+      if (!userId) {
+        console.log('No user authenticated - returning empty quotes');
+        return [];
+      }
+
+      const supabase = await createClerkSupabaseClient();
+      
+      const { data, error } = await supabase
+        .from('quotes')
+        .select('*')
+        .eq('profile_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (error) {
+        console.error('Failed to fetch user quotes:', error);
+        throw error;
+      }
+
+      console.log(`Retrieved ${data?.length || 0} quotes for user ${userId}`);
+      return data || [];
+    } catch (error) {
+      console.error('getUserQuotes error:', error);
+      return [];
+    }
   }
 
-  async getQuoteById(quoteId: string): Promise<QuoteResult | null> {
-    // TODO: Implement with database
-    console.log('getQuoteById not implemented in Phase 1');
-    return null;
+  async getQuoteById(quoteId: string): Promise<any | null> {
+    try {
+      const { userId } = await auth();
+      
+      if (!userId) {
+        console.log('No user authenticated - cannot fetch quote');
+        return null;
+      }
+
+      const supabase = await createClerkSupabaseClient();
+      
+      const { data, error } = await supabase
+        .from('quotes')
+        .select('*')
+        .eq('id', quoteId)
+        .eq('profile_id', userId) // Ensure user can only access their own quotes
+        .single();
+
+      if (error) {
+        console.error('Failed to fetch quote by ID:', error);
+        return null;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('getQuoteById error:', error);
+      return null;
+    }
   }
 
   // ============================================
