@@ -54,6 +54,30 @@ export default function RootPage() {
           </div>
         </div>
       </div>
+      
+      {/* Version Badge */}
+      <div className="fixed bottom-4 right-4 bg-black/80 text-white px-3 py-1 rounded-full text-xs font-mono backdrop-blur-sm"
+           style={{
+             position: 'fixed',
+             bottom: '16px',
+             right: '16px',
+             backgroundColor: 'rgba(0, 0, 0, 0.8)',
+             color: 'white',
+             padding: '4px 12px',
+             borderRadius: '9999px',
+             fontSize: '11px',
+             fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
+             backdropFilter: 'blur(4px)',
+             border: '1px solid rgba(255, 255, 255, 0.1)',
+             boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+           }}>
+        v7.0 • {new Date().toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric', 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        })}
+      </div>
     </div>
   )
 }
