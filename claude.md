@@ -121,10 +121,53 @@ This is a comprehensive **insurance management platform** with modular feature a
 
 #### Authentication Flow
 ```
-Login Page → Magic Link → Email → Dashboard
+Login Page → Clerk SignIn → Social/Email → Dashboard
      ↓
-Supabase Auth → JWT Token → Protected Routes
+Clerk Auth → JWT Token → Protected Routes
 ```
+
+**AUTHENTICATION CHANGE (January 2025)**:
+- **Switched from Supabase to Clerk** for better reliability
+- **Reason**: Supabase auth had spinning wheel issues and token errors
+- **Benefits**: Professional UX, faster setup, more reliable sessions
+
+## 📦 Phase 2 Components (Alabama Quoting)
+
+**LOCATION**: All Phase 2 quoting components are preserved in the codebase:
+
+### Alabama Quoting Files (Ready for Phase 2)
+```
+/lib/
+├── cmsApiService.ts          # CMS Marketplace API integration
+├── cmsClient.ts              # CMS API client
+├── cmsService.ts             # CMS service layer
+├── quoteEngine.ts            # Quote calculation engine
+├── smartyStreetsService.ts   # ZIP → County → FIPS mapping
+├── zipCodeMapping.ts         # Alabama county mappings
+├── zipService.ts             # ZIP code utilities
+└── services/                 # Additional service files
+
+/app/(protected)/quoting/
+├── quotes/
+│   ├── alabama/page.tsx      # Alabama quote form (disabled)
+│   ├── layout.tsx            # Quoting layout
+│   └── page.tsx              # Quoting hub (shows "Coming Soon")
+
+/components/plans/            # Plan display components
+```
+
+### What's Ready for Phase 2 (3am)
+- ✅ **Complete Alabama quote form** (67 counties, all ACA fields)
+- ✅ **CMS API integration** (plans, rates, subsidies)
+- ✅ **SmartyStreets integration** (ZIP validation)
+- ✅ **Quote calculation engine** (premiums, subsidies, out-of-pocket)
+- ✅ **Professional plan display** (metal levels, benefits)
+
+### To Enable Phase 2
+1. **Set feature flag**: `NEXT_PUBLIC_ENABLE_QUOTING=true`
+2. **Add API keys**: CMS_API_KEY, SMARTYSTREETS_AUTH_ID, SMARTYSTREETS_AUTH_TOKEN
+3. **Update navigation**: Remove "Coming Soon" from quoting
+4. **Deploy**: All code is ready, just needs environment variables
 
 #### Form Architecture
 - **Multi-step form** with progress indicator
@@ -283,14 +326,14 @@ headers: {
 
 **Required for Production**:
 ```env
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
+CLERK_SECRET_KEY=sk_test_xxx
 
-# CMS Marketplace API
+# CMS Marketplace API (Phase 2)
 CMS_API_KEY=your_cms_api_key
 
-# SmartyStreets
+# SmartyStreets (Phase 2)
 SMARTYSTREETS_AUTH_ID=your_auth_id
 SMARTYSTREETS_AUTH_TOKEN=your_auth_token
 ```
@@ -336,10 +379,10 @@ SMARTYSTREETS_AUTH_TOKEN=your_auth_token
 ## 🔒 Security Implementation
 
 ### Authentication Security
-- Supabase Auth with magic links
+- Clerk Auth with social providers and email
 - JWT token validation
 - Protected route middleware
-- Session management
+- Secure session management
 
 ### Data Security
 - Row Level Security (RLS) policies

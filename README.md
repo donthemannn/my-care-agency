@@ -35,7 +35,7 @@ The Quotes feature will include:
 ## 🛠 Tech Stack
 
 - **Framework**: Next.js 14 with App Router
-- **Authentication**: Supabase Auth with magic links
+- **Authentication**: Clerk (switched from Supabase for reliability)
 - **Database**: Supabase PostgreSQL with Row Level Security
 - **Styling**: Tailwind CSS with professional healthcare.gov-inspired design
 - **Forms**: React Hook Form with Zod validation
@@ -50,9 +50,9 @@ Before running this application, you need:
    - CMS Marketplace API key from [developer.cms.gov](https://developer.cms.gov)
    - SmartyStreets API credentials from [smartystreets.com](https://smartystreets.com)
 
-2. **Supabase Project**:
-   - Create a project at [supabase.com](https://supabase.com)
-   - Note your project URL and anon key
+2. **Clerk Project**:
+   - Create a project at [clerk.com](https://clerk.com)
+   - Note your publishable key and secret key
 
 3. **Alabama Insurance License** (for production use)
 
@@ -69,14 +69,14 @@ npm install
 Create `.env.local` with your API keys:
 
 ```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
 
-# CMS Marketplace API
+# CMS Marketplace API (Phase 2)
 CMS_API_KEY=your_cms_api_key
 
-# SmartyStreets API
+# SmartyStreets API (Phase 2)
 SMARTYSTREETS_AUTH_ID=your_auth_id
 SMARTYSTREETS_AUTH_TOKEN=your_auth_token
 ```
@@ -211,8 +211,8 @@ Consider adding:
 ## 🔒 Security
 
 ### Authentication
-- **Magic Link Login**: Passwordless authentication via Supabase
-- **Row Level Security**: Database policies protect user data
+- **Clerk Authentication**: Professional login/signup flows with social providers
+- **Session Management**: Secure JWT-based sessions
 - **Protected Routes**: Middleware ensures authentication
 
 ### API Security
