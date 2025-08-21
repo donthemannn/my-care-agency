@@ -1,60 +1,35 @@
 # My Care Agency - Insurance Management Platform
 
-A comprehensive insurance management system with multiple features including dashboard, training, customer management, and quoting tools. Built with modular architecture for easy feature expansion.
+A professional insurance management system built for Alabama insurance agents. Features a comprehensive ACA quoting system with real-time CMS Marketplace API integration.
 
-## 🚀 Platform Features
+## 🚀 Current Status
 
-### ✅ **Active Features**
-- **Dashboard** - Central management hub with activity overview
-- **Training** - Insurance training modules and progress tracking
-- **AI Assistant** - Intelligent support and guidance system
+### ✅ **Phase 1: Core Platform (LIVE)**
+- **Dashboard** - Central management hub with system monitoring
+- **Authentication** - Clerk-powered login with Google/GitHub OAuth
 - **Settings** - User profile and system configuration
 
-### 🚧 **Coming Soon Features**
+### 🚧 **Phase 2: Alabama Quoting (IN DEVELOPMENT)**
+- **Quote Engine** - Multi-step ACA quote form with real CMS data
+- **Geographic Services** - ZIP → County → FIPS mapping via SmartyStreets
+- **Subsidy Calculator** - Federal premium tax credit calculations
+- **Plan Display** - Professional plan cards with pricing and benefits
+
+### 📋 **Coming Soon**
 - **Customers** - Client management and relationship tracking
-- **Quotes** - Multi-state ACA insurance quoting system
-- **Plan Finder** - Insurance plan discovery and comparison tools
-- **Reports** - Analytics, performance metrics, and compliance reporting
-- **Compliance** - Regulatory compliance tracking and management
-
-### 📋 **Quotes Feature Details** (When Enabled)
-The Quotes feature will include:
-- **Multi-step quote form** with all required ACA questions
-- **Real-time validation** using Zod schema validation
-- **CMS Marketplace API integration** following official guidelines
-- **SmartyStreets integration** for accurate ZIP → County → FIPS mapping
-- **Federal subsidy calculations** with 2024 poverty guidelines
-- **Professional plan display** with metal levels, premiums, and benefits
-
-#### State Coverage (Inside Quotes)
-- **Alabama (FIRST)** - All 67 counties with accurate FIPS mapping
-- **Texas (PLANNED)** - Future expansion target
-- **Florida (PLANNED)** - Future expansion target
-- **Additional States** - Up to 13+ states total
+- **Plan Finder** - Advanced plan comparison tools
+- **Reports** - Analytics and commission tracking
+- **Training** - Insurance education modules
+- **AI Assistant** - Intelligent support system
 
 ## 🛠 Tech Stack
 
 - **Framework**: Next.js 14 with App Router
-- **Authentication**: Clerk (switched from Supabase for reliability)
-- **Database**: Supabase PostgreSQL with Row Level Security
+- **Authentication**: Clerk with OAuth providers (Google, GitHub, Email)
 - **Styling**: Tailwind CSS with professional healthcare.gov-inspired design
 - **Forms**: React Hook Form with Zod validation
 - **APIs**: CMS Marketplace API, SmartyStreets API
-- **Deployment**: Vercel-ready
-
-## 📋 Prerequisites
-
-Before running this application, you need:
-
-1. **API Keys**:
-   - CMS Marketplace API key from [developer.cms.gov](https://developer.cms.gov)
-   - SmartyStreets API credentials from [smartystreets.com](https://smartystreets.com)
-
-2. **Clerk Project**:
-   - Create a project at [clerk.com](https://clerk.com)
-   - Note your publishable key and secret key
-
-3. **Alabama Insurance License** (for production use)
+- **Deployment**: Vercel with automatic deployments
 
 ## 🚀 Quick Start
 
@@ -66,12 +41,12 @@ npm install
 ```
 
 ### 2. Environment Setup
-Create `.env.local` with your API keys:
+Create `.env.local` with your Clerk keys:
 
 ```env
-# Clerk Authentication
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-CLERK_SECRET_KEY=your_clerk_secret_key
+# Clerk Authentication (Required)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
 
 # CMS Marketplace API (Phase 2)
 CMS_API_KEY=your_cms_api_key
@@ -81,22 +56,19 @@ SMARTYSTREETS_AUTH_ID=your_auth_id
 SMARTYSTREETS_AUTH_TOKEN=your_auth_token
 ```
 
-### 3. Database Setup
-Run the Supabase migration:
-
-```bash
-# If using Supabase CLI
-supabase db push
-
-# Or manually run the SQL in supabase/migrations/001_init.sql
-```
-
-### 4. Start Development Server
+### 3. Start Development Server
 ```bash
 npm run dev
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) to see the application.
+
+## 📋 Prerequisites
+
+1. **Clerk Project**: Create at [clerk.com](https://clerk.com) and get your API keys
+2. **CMS API Key**: From [developer.cms.gov](https://developer.cms.gov) (for Phase 2)
+3. **SmartyStreets Account**: From [smartystreets.com](https://smartystreets.com) (for Phase 2)
+4. **Alabama Insurance License** (for production use)
 
 ## 📖 How It Works
 
@@ -124,24 +96,45 @@ Visit [http://localhost:3000](http://localhost:3000) to see the application.
 ## 🏗 Project Structure
 
 ```
-my-care-agency/
-├── app/                          # Next.js App Router
-│   ├── (auth)/login/            # Authentication pages
-│   ├── (dashboard)/             # Protected dashboard pages
-│   │   ├── dashboard/           # Main dashboard
-│   │   ├── quotes/              # Quote form and results
-│   │   └── settings/            # User settings
-│   ├── api/quote/               # Quote generation API
-│   └── layout.tsx               # Root layout
-├── lib/                         # Core business logic
-│   ├── services/                # Service layer
-│   │   ├── cmsApiService.ts     # CMS Marketplace API
-│   │   ├── geoService.ts        # Geographic services
-│   │   └── quoteService.ts      # Main quote orchestration
-│   ├── types.ts                 # TypeScript definitions
-│   └── supabaseClient.ts        # Database client
-├── supabase/migrations/         # Database schema
-└── components/                  # Reusable UI components
+My Care Agency (Insurance Management Platform)
+├── Dashboard (main hub) - Phase 1 ✅
+│   ├── app/dashboard/              # Main dashboard view
+│   ├── components/                 # Dashboard UI components
+│   └── middleware.ts               # Clerk authentication
+│
+├── Quoting - Phase 2 🚧
+│   ├── Alabama
+│   │   ├── app/quotes/            # Quote form and results
+│   │   ├── api/quote/             # Quote generation API
+│   │   └── lib/services/
+│   │       ├── cmsApiService.ts   # CMS Marketplace API
+│   │       ├── geoService.ts      # Geographic services
+│   │       └── quoteService.ts    # Main quote orchestration
+│   └── [Other States - Coming Soon]
+│
+├── Settings - Phase 1 ✅
+│   ├── app/settings/              # User settings pages
+│   └── components/                # Settings UI components
+│
+├── Authentication - Phase 1 ✅
+│   ├── app/(auth)/sign-in/        # Clerk login pages
+│   ├── app/(auth)/sso-callback/   # OAuth callback handler
+│   └── lib/clerkClient.ts         # Auth utilities
+│
+└── COMING SOON:
+    ├── Training - TBD
+    ├── AI Assistant - TBD
+    ├── Customers - TBD
+    ├── Plan Finder - TBD
+    ├── Reports - TBD
+    └── Compliance - TBD
+
+Technical Foundation:
+- Framework: Next.js 14 with App Router
+- Authentication: Clerk with OAuth providers
+- Types: TypeScript definitions in lib/types.ts
+- Layout: Root layout with ClerkProvider
+- Components: Reusable UI in components/
 ```
 
 ## 🔧 Configuration
@@ -156,10 +149,11 @@ The application follows official CMS API guidelines:
   - `/counties` - Get county/FIPS data
   - `/rates` - Get plan rates and pricing
 
-### Database Schema
-- **profiles**: User profile information
-- **quotes**: Insurance quote history with RLS policies
-- **Indexes**: Optimized for quote retrieval and user queries
+### Authentication Configuration
+- **Clerk Provider**: Configured in app/layout.tsx
+- **Protected Routes**: Middleware protects /dashboard and /settings
+- **OAuth Providers**: Google, GitHub, Email/Password enabled
+- **Session Management**: Automatic JWT handling
 
 ## 🧪 Testing
 
@@ -191,9 +185,9 @@ vercel
 
 ### Environment Variables for Production
 Ensure all environment variables are set in your deployment platform:
-- Supabase credentials
-- CMS API key
-- SmartyStreets credentials
+- Clerk API keys (NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY)
+- CMS API key (for Phase 2)
+- SmartyStreets credentials (for Phase 2)
 
 ## 📊 Monitoring
 
@@ -206,14 +200,15 @@ Ensure all environment variables are set in your deployment platform:
 Consider adding:
 - Sentry for error tracking
 - Vercel Analytics for performance
-- Supabase monitoring for database health
+- Clerk Dashboard for authentication metrics
 
 ## 🔒 Security
 
 ### Authentication
-- **Clerk Authentication**: Professional login/signup flows with social providers
-- **Session Management**: Secure JWT-based sessions
-- **Protected Routes**: Middleware ensures authentication
+- **Clerk Authentication**: Professional login/signup flows with OAuth providers
+- **Session Management**: Secure JWT-based sessions with automatic refresh
+- **Protected Routes**: Middleware ensures authentication for /dashboard and /settings
+- **OAuth Security**: Google and GitHub integration with secure callbacks
 
 ### API Security
 - **Environment Variables**: All API keys stored securely
