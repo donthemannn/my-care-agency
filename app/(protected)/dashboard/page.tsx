@@ -17,7 +17,7 @@ import {
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser()
-  // CACHE BUST: Modern dashboard with cards - v2.0
+  // DEPLOYMENT FORCE: Modern dashboard with cards - v3.0 - TIMESTAMP: 2025-08-20-20:30
 
   if (!isLoaded) {
     return (
@@ -31,8 +31,8 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-blue-600">
-          🎉 MODERN DASHBOARD DEPLOYED! Welcome back, {user?.firstName || 'User'}!
+        <h1 className="text-4xl font-bold tracking-tight text-blue-600 bg-blue-100 p-4 rounded-lg border-2 border-blue-300">
+          🚀 VERCEL DEPLOYMENT v3.0 - TIMESTAMP: 20:30 🚀 Welcome back, {user?.firstName || 'User'}!
         </h1>
         <p className="text-muted-foreground text-lg">
           ✅ Your NEW insurance quoting platform is ready. Start generating Alabama ACA quotes today.
