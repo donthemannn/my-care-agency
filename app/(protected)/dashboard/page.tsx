@@ -17,6 +17,7 @@ import {
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser()
+  // Force deployment refresh - modern dashboard with cards
 
   if (!isLoaded) {
     return (
