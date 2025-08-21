@@ -17,7 +17,6 @@ import {
 
 export default function DashboardPage() {
   const { user, isLoaded } = useUser()
-  // DEPLOYMENT FORCE: Modern dashboard with cards - v6.0 - TIMESTAMP: 2025-08-20-23:45 - TAILWIND CONFIG ADDED
 
   if (!isLoaded) {
     return (
@@ -28,23 +27,23 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="p-8 space-y-8 bg-gradient-to-br from-gray-50 to-white min-h-screen">
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-bold tracking-tight text-blue-600 bg-blue-100 p-4 rounded-lg border-2 border-blue-300">
-          🚀 VERCEL DEPLOYMENT v6.0 - TIMESTAMP: 23:45 🚀 Welcome back, {user?.firstName || 'User'}!
+        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          Welcome back, {user?.firstName || 'Agent'}!
         </h1>
-        <p className="text-muted-foreground text-lg">
-          ✅ Your NEW insurance quoting platform is ready. Start generating Alabama ACA quotes today.
+        <p className="text-gray-600 text-lg mt-2">
+          Your professional insurance management platform is ready. Let's grow your business today.
         </p>
       </div>
 
       {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-md bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Quotes</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+            <FileText className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -54,10 +53,10 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-md bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active States</CardTitle>
-            <MapPin className="h-4 w-4 text-muted-foreground" />
+            <MapPin className="h-4 w-4 text-indigo-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1</div>
@@ -67,10 +66,10 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-md bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">System Status</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <Activity className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">Online</div>
@@ -80,10 +79,10 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-md bg-white">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">ACA Plans</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+            <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">Ready</div>
@@ -96,16 +95,16 @@ export default function DashboardPage() {
 
       {/* Quick Actions */}
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="hover:shadow-xl transition-shadow duration-300 border-0 shadow-lg bg-white">
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
+            <CardTitle className="text-xl font-bold">Quick Actions</CardTitle>
             <CardDescription>
               Get started with the most common tasks
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <Link href="/quoting/quotes/alabama">
-              <Button className="w-full justify-start" size="lg">
+              <Button className="w-full justify-start bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-lg transition-shadow duration-300" size="lg">
                 <FileText className="mr-2 h-4 w-4" />
                 Generate Alabama Quote
               </Button>
@@ -127,9 +126,9 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-xl transition-shadow duration-300 border-0 shadow-lg bg-white">
           <CardHeader>
-            <CardTitle>System Information</CardTitle>
+            <CardTitle className="text-xl font-bold">System Information</CardTitle>
             <CardDescription>
               Current system status and integrations
             </CardDescription>
@@ -137,7 +136,7 @@ export default function DashboardPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green-500" aria-hidden="true" />
                 <span className="text-sm">CMS Marketplace API</span>
               </div>
               <span className="text-xs text-green-600 font-medium">Connected</span>
@@ -145,7 +144,7 @@ export default function DashboardPage() {
             
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green-500" aria-hidden="true" />
                 <span className="text-sm">SmartyStreets API</span>
               </div>
               <span className="text-xs text-green-600 font-medium">Connected</span>
@@ -153,7 +152,7 @@ export default function DashboardPage() {
             
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green-500" aria-hidden="true" />
                 <span className="text-sm">Database</span>
               </div>
               <span className="text-xs text-green-600 font-medium">Connected</span>
@@ -161,7 +160,7 @@ export default function DashboardPage() {
             
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green-500" aria-hidden="true" />
                 <span className="text-sm">Alabama Plan Data</span>
               </div>
               <span className="text-xs text-green-600 font-medium">Available</span>
@@ -177,9 +176,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Getting Started */}
-      <Card>
+      <Card className="hover:shadow-xl transition-shadow duration-300 border-0 shadow-lg bg-gradient-to-r from-blue-50 to-indigo-50">
         <CardHeader>
-          <CardTitle>Getting Started</CardTitle>
+          <CardTitle className="text-2xl font-bold">Getting Started</CardTitle>
           <CardDescription>
             New to the platform? Here's how to generate your first quote
           </CardDescription>
@@ -187,7 +186,7 @@ export default function DashboardPage() {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
             <div className="flex flex-col items-center text-center space-y-2">
-              <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-md">
                 1
               </div>
               <h4 className="font-medium">Enter Client Info</h4>
@@ -197,7 +196,7 @@ export default function DashboardPage() {
             </div>
             
             <div className="flex flex-col items-center text-center space-y-2">
-              <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-md">
                 2
               </div>
               <h4 className="font-medium">Generate Quote</h4>
@@ -207,7 +206,7 @@ export default function DashboardPage() {
             </div>
             
             <div className="flex flex-col items-center text-center space-y-2">
-              <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-md">
                 3
               </div>
               <h4 className="font-medium">Review & Share</h4>
@@ -217,9 +216,9 @@ export default function DashboardPage() {
             </div>
           </div>
           
-          <div className="mt-6 flex justify-center">
+          <div className="mt-8 flex justify-center">
             <Link href="/quoting/quotes/alabama">
-              <Button>
+              <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 Start Your First Quote
                 <ExternalLink className="ml-2 h-4 w-4" />
               </Button>
