@@ -38,7 +38,8 @@ export default function RootPage() {
             </SignedIn>
           </div>
           
-          <div className="mt-16 grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="mt-16 grid gap-8 max-w-5xl mx-auto"
+               style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px', maxWidth: '1024px', margin: '64px auto 0'}}>
             <div className="bg-white p-6 rounded-lg shadow-md" style={{backgroundColor: 'white', padding: '24px', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}}>
               <h3 className="text-xl font-semibold mb-3" style={{fontSize: '20px', fontWeight: '600', marginBottom: '12px'}}>Alabama Quoting</h3>
               <p className="text-gray-600" style={{color: '#4b5563'}}>Get accurate ACA marketplace quotes for Alabama residents with real-time pricing.</p>
@@ -71,12 +72,7 @@ export default function RootPage() {
              border: '1px solid rgba(255, 255, 255, 0.1)',
              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
            }}>
-        v7.0 • {new Date().toLocaleDateString('en-US', { 
-          month: 'short', 
-          day: 'numeric', 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        })}
+{process.env.NEXT_PUBLIC_APP_VERSION || 'v8.0'}
       </div>
     </div>
   )
