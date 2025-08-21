@@ -20,8 +20,14 @@ export class CMSApiService {
   constructor() {
     this.apiKey = process.env.CMS_API_KEY || '';
     
+    if (!this.apiKey && process.env.NODE_ENV === 'production') {
+      throw new Error('CMS_API_KEY environment variable is required in production');
+    }
+    
+    // Development mode fallback
     if (!this.apiKey) {
-      throw new Error('CMS_API_KEY environment variable is required');
+      console.warn('⚠️  CMS_API_KEY not found - using development mode with mock data');
+      this.apiKey = 'development-mode';
     }
   }
 
@@ -92,10 +98,61 @@ export class CMSApiService {
   }
 
   // ============================================
+  // DEVELOPMENT MODE MOCK DATA
+  // ============================================
+
+  private getMockData<T>(endpoint: string, data?: any): T {
+    if (endpoint === '/plans') {
+      return [
+        {
+          id: 'mock-plan-1',
+          name: 'Alabama Blue Cross Bronze Plan',
+          issuer: { name: 'Blue Cross Blue Shield of Alabama' },
+          metal_level: 'Bronze',
+          plan_type: 'HMO',
+          premium: 285.50,
+          deductible: { individual: 6000 },
+          out_of_pocket_maximum: { individual: 8000 },
+          network_tier: 'Standard'
+        },
+        {
+          id: 'mock-plan-2', 
+          name: 'Alabama Silver Health Plan',
+          issuer: { name: 'Alabama Health Insurance' },
+          metal_level: 'Silver',
+          plan_type: 'PPO',
+          premium: 425.75,
+          deductible: { individual: 3500 },
+          out_of_pocket_maximum: { individual: 7000 },
+          network_tier: 'Standard'
+        }
+      ] as T;
+    }
+
+    if (endpoint === '/households/eligibility/estimates') {
+      return {
+        aptc_amount: 150,
+        csr_variant: 'silver_87',
+        estimated_premium_after_aptc: 0,
+        is_eligible_for_aptc: true,
+        is_eligible_for_csr: true
+      } as T;
+    }
+
+    return {} as T;
+  }
+
+  // ============================================
   // CMS API CALLS
   // ============================================
 
   private async makeApiCall<T>(endpoint: string, data?: any): Promise<T> {
+    // Development mode fallback
+    if (this.apiKey === 'development-mode') {
+      console.log(`🔧 Development Mode: Mocking CMS API call to ${endpoint}`);
+      return this.getMockData<T>(endpoint, data);
+    }
+
     const url = `${this.baseUrl}${endpoint}`;
     
     const options: RequestInit = {
