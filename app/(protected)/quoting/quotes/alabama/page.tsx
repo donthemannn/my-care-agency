@@ -8,54 +8,95 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { QuoteFormData, PlanResult } from '@/lib/types'
 
 interface QuoteInputs {
   income: string
   householdSize: string
-  metalLevel: string
-  smoker: string
+  dateOfBirth: string
   gender: string
-  age: string
   zipCode: string
+  tobaccoUse: string
+  isCitizen: string
+  isTribalMember: string
+  employmentStatus: string
+  hasCurrentCoverage: string
+  willClaimDependents: string
+  filingStatus: string
 }
 
 export default function AlabamaQuotingPage() {
   const [inputs, setInputs] = useState<QuoteInputs>({
     income: '',
-    householdSize: '',
-    metalLevel: '',
-    smoker: '',
+    householdSize: '1',
+    dateOfBirth: '',
     gender: '',
-    age: '',
-    zipCode: ''
+    zipCode: '',
+    tobaccoUse: 'false',
+    isCitizen: 'true',
+    isTribalMember: 'false',
+    employmentStatus: 'employed',
+    hasCurrentCoverage: 'false',
+    willClaimDependents: 'false',
+    filingStatus: 'single'
   })
 
-  const [results, setResults] = useState<any>(null)
+  const [results, setResults] = useState<{ plans: PlanResult[]; county: string; totalPlans: number } | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleInputChange = (field: keyof QuoteInputs, value: string) => {
     setInputs(prev => ({ ...prev, [field]: value }))
+    setError(null)
   }
 
   const calculateQuote = async () => {
     setLoading(true)
+    setError(null)
     
-    // Simulate API call for now
-    setTimeout(() => {
-      const mockResults = {
-        monthlyPremium: 450,
-        subsidyAmount: 200,
-        outOfPocketCost: 250,
-        deductible: 2500,
-        maxOutOfPocket: 8000
+    try {
+      const formData: QuoteFormData = {
+        zipCode: inputs.zipCode,
+        dateOfBirth: inputs.dateOfBirth,
+        gender: inputs.gender as 'male' | 'female',
+        annualIncome: parseInt(inputs.income),
+        householdSize: parseInt(inputs.householdSize),
+        tobaccoUse: inputs.tobaccoUse === 'true',
+        isCitizen: inputs.isCitizen === 'true',
+        isTribalMember: inputs.isTribalMember === 'true',
+        employmentStatus: inputs.employmentStatus as any,
+        hasCurrentCoverage: inputs.hasCurrentCoverage === 'true',
+        willClaimDependents: inputs.willClaimDependents === 'true',
+        filingStatus: inputs.filingStatus as any
       }
-      setResults(mockResults)
+
+      const response = await fetch('/api/quotes/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!data.success) {
+        setError(data.error || 'Failed to generate quote')
+        return
+      }
+
+      setResults(data.data)
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.')
+      console.error('Quote generation error:', err)
+    } finally {
       setLoading(false)
-    }, 2000)
+    }
   }
 
-  const isFormValid = inputs.income && inputs.householdSize && inputs.metalLevel && 
-                     inputs.smoker && inputs.gender && inputs.age && inputs.zipCode
+  const isFormValid = inputs.income && inputs.householdSize && inputs.dateOfBirth && 
+                     inputs.gender && inputs.zipCode
 
   return (
     <div className="space-y-8">
@@ -75,6 +116,12 @@ export default function AlabamaQuotingPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="income">Annual Income ($)</Label>
@@ -105,7 +152,7 @@ export default function AlabamaQuotingPage() {
             </div>
 
             <div>
-              <Label htmlFor="zipCode">ZIP Code</Label>
+              <Label htmlFor="zipCode">ZIP Code (Alabama)</Label>
               <Input
                 id="zipCode"
                 placeholder="35201"
@@ -116,13 +163,12 @@ export default function AlabamaQuotingPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="age">Age</Label>
+                <Label htmlFor="dateOfBirth">Date of Birth</Label>
                 <Input
-                  id="age"
-                  type="number"
-                  placeholder="35"
-                  value={inputs.age}
-                  onChange={(e) => handleInputChange('age', e.target.value)}
+                  id="dateOfBirth"
+                  type="date"
+                  value={inputs.dateOfBirth}
+                  onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
                 />
               </div>
               <div>
@@ -142,29 +188,29 @@ export default function AlabamaQuotingPage() {
 
             <div>
               <Label>Tobacco Use</Label>
-              <RadioGroup value={inputs.smoker} onValueChange={(value) => handleInputChange('smoker', value)}>
+              <RadioGroup value={inputs.tobaccoUse} onValueChange={(value) => handleInputChange('tobaccoUse', value)}>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="no" id="nonsmoker" />
+                  <RadioGroupItem value="false" id="nonsmoker" />
                   <Label htmlFor="nonsmoker">Non-smoker</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="yes" id="smoker" />
+                  <RadioGroupItem value="true" id="smoker" />
                   <Label htmlFor="smoker">Smoker</Label>
                 </div>
               </RadioGroup>
             </div>
 
             <div>
-              <Label>Metal Level</Label>
-              <Select value={inputs.metalLevel} onValueChange={(value) => handleInputChange('metalLevel', value)}>
+              <Label>Tax Filing Status</Label>
+              <Select value={inputs.filingStatus} onValueChange={(value) => handleInputChange('filingStatus', value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select metal level" />
+                  <SelectValue placeholder="Select filing status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="bronze">Bronze (60% coverage)</SelectItem>
-                  <SelectItem value="silver">Silver (70% coverage)</SelectItem>
-                  <SelectItem value="gold">Gold (80% coverage)</SelectItem>
-                  <SelectItem value="platinum">Platinum (90% coverage)</SelectItem>
+                  <SelectItem value="single">Single</SelectItem>
+                  <SelectItem value="married_filing_jointly">Married Filing Jointly</SelectItem>
+                  <SelectItem value="married_filing_separately">Married Filing Separately</SelectItem>
+                  <SelectItem value="head_of_household">Head of Household</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -194,34 +240,70 @@ export default function AlabamaQuotingPage() {
               </div>
             ) : (
               <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <div className="text-sm text-blue-600 font-medium">Monthly Premium</div>
-                    <div className="text-2xl font-bold text-blue-900">${results.monthlyPremium}</div>
-                  </div>
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <div className="text-sm text-green-600 font-medium">Monthly Subsidy</div>
-                    <div className="text-2xl font-bold text-green-900">${results.subsidyAmount}</div>
+                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                  <div className="text-sm text-green-600 font-medium">
+                    Found {results.totalPlans} plans in {results.county} County, Alabama
                   </div>
                 </div>
 
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <div className="text-sm text-purple-600 font-medium">Your Monthly Cost</div>
-                  <div className="text-3xl font-bold text-purple-900">${results.outOfPocketCost}</div>
-                </div>
+                {results.plans.slice(0, 3).map((plan, index) => (
+                  <Card key={plan.id} className={index === 0 ? 'border-blue-500 border-2' : ''}>
+                    <CardHeader className="pb-3">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle className="text-lg">{plan.name}</CardTitle>
+                          <CardDescription>{plan.issuer} • {plan.metalLevel} • {plan.planType}</CardDescription>
+                        </div>
+                        {index === 0 && (
+                          <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                            BEST VALUE
+                          </div>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-3 gap-4 mb-4">
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-blue-900">
+                            ${Math.round(plan.monthlyPremiumAfterSubsidy)}
+                          </div>
+                          <div className="text-sm text-gray-600">Monthly Cost</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-semibold text-green-700">
+                            ${Math.round(plan.aptcAmount || 0)}
+                          </div>
+                          <div className="text-sm text-gray-600">Monthly Subsidy</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-semibold">
+                            ${Math.round(plan.monthlyPremium)}
+                          </div>
+                          <div className="text-sm text-gray-600">Full Premium</div>
+                        </div>
+                      </div>
 
-                <Separator />
+                      <Separator className="my-3" />
 
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Annual Deductible</span>
-                    <span className="font-semibold">${results.deductible.toLocaleString()}</span>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Deductible</span>
+                          <span className="font-medium">${plan.annualDeductible?.toLocaleString() || 'N/A'}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Max Out-of-Pocket</span>
+                          <span className="font-medium">${plan.maxOutOfPocket?.toLocaleString() || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+
+                {results.plans.length > 3 && (
+                  <div className="text-center text-gray-600">
+                    <p>+ {results.plans.length - 3} more plans available</p>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Max Out-of-Pocket</span>
-                    <span className="font-semibold">${results.maxOutOfPocket.toLocaleString()}</span>
-                  </div>
-                </div>
+                )}
 
                 <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
                   <div className="text-sm text-yellow-800">
